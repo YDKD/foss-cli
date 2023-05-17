@@ -1,30 +1,44 @@
 #!/usr/bin/env node
 
+// lib dependencies
 const fs = require('fs');
 const ejs = require('ejs');
 const path = require('path');
 const inquirer = require('inquirer');
+const { program } = require('commander');
 
-const TEMPLATE_DIR = path.resolve(__dirname, '../templates');
+// local dependencies
+const log = require('../lib/log.js');
+const { TEMPLATE_DIR, PROJECT_DIR, REMOVE_REQUESTIONS, PROJECT_CONFIG } = require('../config/index.js');
 
 const questions = [
   {
     type: 'input',
     name: 'projectName',
     message: 'Enter project name:',
+    default: PROJECT_CONFIG.DEFAULT_PROJECT_NAME,
   },
   {
     type: 'list',
     name: 'technology',
     message: 'Select technology:',
     choices: ['React', 'Vue', 'Angular'],
+    default: PROJECT_CONFIG.DEFAULT_TECHNOLOGY,
   },
 ];
+
+
 
 inquirer.prompt(questions).then((answers) => {
   const { projectName, technology } = answers;
 
-  const projectDirectory = `${process.cwd()}/${projectName}`;
+  // 校验项目名称是否合法
+  if (!projectName) {
+    log('项目名称不能为空', 'red');
+    return;
+  }
+
+  const projectDirectory = `${PROJECT_DIR}/${projectName}`;
   console.log(projectDirectory)
 
   const templatePath = path.join(TEMPLATE_DIR, technology.toLowerCase());
@@ -34,17 +48,33 @@ inquirer.prompt(questions).then((answers) => {
   if (!fs.existsSync(projectDirectory)) {
     // Create project directory
     fs.mkdirSync(projectDirectory);
+  } else {
+    inquirer.prompt(REMOVE_REQUESTIONS).then((answers) => {
+      const { remove } = answers;
+      if (remove === true) {
+        // 兼容 node 版本
+        fs.rmSync = fs.rmSync || fs.rmdirSync;
+        fs.rmSync(projectDirectory, { recursive: true });
+        fs.mkdirSync(projectDirectory);
+      } else {
+        log('创建失败，文件夹已经存在', 'red');
+      }
+    }, (error) => {
+      console.log(error)
+    }
+    )
   }
 
-  files.forEach(file => {
-    const filePath = path.join(templatePath, file);
-    const content = ejs.render(fs.readFileSync(filePath, 'utf-8'), { projectName });
-    fs.writeFileSync(path.join(projectDirectory, `${projectName}.${technology}`), content);
-  });
+  // files.forEach(file => {
+  //   const filePath = path.join(TEMPLATE_DIR, file);
+  //   const content = ejs.render(fs.readFileSync(filePath, 'utf-8'), { projectName });
+  //   fs.writeFileSync(path.join(projectDirectory, `${projectName}.${technology}`), content);
+  // });
 
 
 
   // Create index.js file
 
-  console.log(`Created ${projectName} project with ${technology} technology in ${projectDirectory} directory.`);
+  // console.log(`Created ${projectName} project with ${technology} technology in ${projectDirectory} directory.`);
 });
+

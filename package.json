@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/YDKD/foss-cli#readme",
   "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^10.0.1",
     "ejs": "^3.1.9",
     "inquirer": "^8.2.5"
   },
