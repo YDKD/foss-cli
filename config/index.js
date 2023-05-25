@@ -1,5 +1,7 @@
 const path = require('path');
 
+const commands = require('./commands')
+
 // 模板文件夹
 const TEMPLATE_DIR = path.resolve(__dirname, '../templates')
 
@@ -26,5 +28,6 @@ module.exports = {
   TEMPLATE_DIR,
   PROJECT_DIR,
   REMOVE_REQUESTIONS,
-  PROJECT_CONFIG
+  PROJECT_CONFIG,
+  commands
 }
