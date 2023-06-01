@@ -26,26 +26,6 @@ class FossEntry {
 
 
 
-
-    // // 获取用户输入命令
-    // program
-    //   .version(require('../package.json').version)
-    //   .usage('<command> [options]')
-    //   .command('create', 'create a new project')
-    //   .command('list', 'list all templates')
-    //   .command('add', 'add a new template')
-    //   .command('delete', 'delete a template')
-    //   .parse(process.argv);
-
-
-
-
-
-    // 设置提示
-    // program
-    //   .option('-d, --delete <path>', 'delete options from config')
-
-
     // end 解析用户输入命令
     program.parse(process.argv)
 
@@ -54,7 +34,7 @@ class FossEntry {
   #registerCommand() {
     commands.forEach((item) => {
       try {
-        program.command(item.name).description(item.description).action(require(`./services/${item.actionFileName}`))
+        program.command(item.name).description(item.description).action(require(`./commands/${item.actionFileName}`))
       } catch (err) {
         throw new Error(err)
       }
