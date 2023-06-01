@@ -20,7 +20,7 @@ const REMOVE_REQUESTIONS = [
 // 项目创建配置
 const PROJECT_CONFIG = {
   DEFAULT_PROJECT_NAME: 'my-project',
-  DEFAULT_TECHNOLOGY: 'Vue',
+  DEFAULT_TECHNOLOGY: 'vue3',
   DEFAULT_TEMPLATE: 'vue',
 }
 

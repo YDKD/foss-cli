@@ -7,7 +7,6 @@ const inquirer = require('inquirer');
 // local dependencies
 const log = require('../log/index.js');
 const { TEMPLATE_DIR, PROJECT_DIR, REMOVE_REQUESTIONS, PROJECT_CONFIG } = require('../../config/index.js');
-const cloneRepo = require('../utils/clone.js');
 
 module.exports = () => {
   const questions = [
@@ -21,7 +20,7 @@ module.exports = () => {
       type: 'list',
       name: 'technology',
       message: 'Select technology:',
-      choices: ['vue3'],
+      choices: ['React', 'Vue', 'Angular'],
       default: PROJECT_CONFIG.DEFAULT_TECHNOLOGY,
     },
   ];
@@ -40,13 +39,13 @@ module.exports = () => {
     const projectDirectory = `${PROJECT_DIR}/${projectName}`;
     console.log(projectDirectory)
 
+    const templatePath = path.join(TEMPLATE_DIR, technology.toLowerCase());
+    const files = fs.readdirSync(templatePath);
 
     // 判断是否已经存在此文件夹
     if (!fs.existsSync(projectDirectory)) {
       // Create project directory
       fs.mkdirSync(projectDirectory);
-
-      cloneRepo(projectDirectory)
     } else {
       inquirer.prompt(REMOVE_REQUESTIONS).then((answers) => {
         const { remove } = answers;
@@ -55,8 +54,6 @@ module.exports = () => {
           fs.rmSync = fs.rmSync || fs.rmdirSync;
           fs.rmSync(projectDirectory, { recursive: true });
           fs.mkdirSync(projectDirectory);
-
-          cloneRepo(projectDirectory)
         } else {
           log('创建失败，文件夹已经存在', 'red');
         }
@@ -65,5 +62,17 @@ module.exports = () => {
       }
       )
     }
+
+    // files.forEach(file => {
+    //   const filePath = path.join(TEMPLATE_DIR, file);
+    //   const content = ejs.render(fs.readFileSync(filePath, 'utf-8'), { projectName });
+    //   fs.writeFileSync(path.join(projectDirectory, `${projectName}.${technology}`), content);
+    // });
+
+
+
+    // Create index.js file
+
+    // console.log(`Created ${projectName} project with ${technology} technology in ${projectDirectory} directory.`);
   });
 }
