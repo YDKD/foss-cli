@@ -15,8 +15,8 @@ class FossEntry {
   // 入口
   init() {
     // 1、打印 logo
-    const logoText = fs.readFileSync(path.resolve(__dirname, './banner/banner.txt'), { encoding: 'utf-8' })
-    log(logoText)
+    const logoText = fs.readFileSync(path.resolve(__dirname, './banner/tlw.txt'), { encoding: 'utf-8' })
+    log(logoText, '#16bbae')
 
     // 2、设置版本号
     program.version(version)
@@ -34,7 +34,18 @@ class FossEntry {
   #registerCommand() {
     commands.forEach((item) => {
       try {
-        program.command(item.name).description(item.description).action(require(`./commands/${item.actionFileName}`))
+        program
+        .command(item.name)
+        .description(item.description)
+        .action(require(`./commands/${item.actionFileName}`))
+
+        // 注册options
+        if (item.options) {
+          item.options.forEach((option) => {
+            program.option(option.flags, option.description, option.defaultValue)
+          })
+        }
+
       } catch (err) {
         throw new Error(err)
       }
