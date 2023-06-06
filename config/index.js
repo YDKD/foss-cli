@@ -22,11 +22,17 @@ const PROJECT_CONFIG = {
   // 默认项目名
   DEFAULT_PROJECT_NAME: 'my-project',
   // 默认技术选择
-  DEFAULT_TECHNOLOGY: 'vue3',
+  DEFAULT_TEMPLATE: 'vue3',
   // 默认选择模板
   DEFAULT_TEMPLATE: 'vue',
-  // 默认API文件路径
+}
 
+// 仓库配置
+const REPO_CONFIG = {
+  // 仓库地址 前缀
+  REPO_URL_PREFFIX: 'https://api.github.com/orgs/foss-y/repos',
+  // 仓库标签地址 前缀
+  REPO_TAGS_URL_PREFFIX: 'https://api.github.com/repos/foss-y'
 }
 
 module.exports = {
@@ -34,5 +40,6 @@ module.exports = {
   PROJECT_DIR,
   REMOVE_REQUESTIONS,
   PROJECT_CONFIG,
-  commands
+  commands,
+  REPO_CONFIG
 }

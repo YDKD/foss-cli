@@ -15,7 +15,7 @@ class FossEntry {
   // 入口
   init() {
     // 1、打印 logo
-    const logoText = fs.readFileSync(path.resolve(__dirname, './banner/tlw.txt'), { encoding: 'utf-8' })
+    const logoText = fs.readFileSync(path.resolve(__dirname, './banner/banner.txt'), { encoding: 'utf-8' })
     log(logoText, '#16bbae')
 
     // 2、设置版本号

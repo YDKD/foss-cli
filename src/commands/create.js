@@ -3,13 +3,14 @@ const fs = require('fs');
 const ejs = require('ejs');
 const path = require('path');
 const inquirer = require('inquirer');
+const { Generator, Repo } = require('../lib')
 
 // local dependencies
 const log = require('../log/index.js');
 const { TEMPLATE_DIR, PROJECT_DIR, REMOVE_REQUESTIONS, PROJECT_CONFIG } = require('../../config/index.js');
 const cloneRepo = require('../utils/clone.js');
 
-module.exports = () => {
+module.exports = async () => {
   const questions = [
     {
       type: 'input',
@@ -19,17 +20,29 @@ module.exports = () => {
     },
     {
       type: 'list',
-      name: 'technology',
-      message: 'Select technology:',
-      choices: ['vue3'],
-      default: PROJECT_CONFIG.DEFAULT_TECHNOLOGY,
+      name: 'template',
+      message: 'Select a template to create project',
+      choices: [],
+      default: PROJECT_CONFIG.DEFAULT_TEMPLATE,
     },
   ];
 
+  // 获取当前有哪些模板可以选择
+  const repoInstance = new Repo();
 
+  const repoList = await repoInstance.getRepoList();
+
+  // 处理模板名称
+  const repoNames = repoList.map((item) => {
+    if (item.name?.indexOf('template') != -1) {
+      return item.name
+    }
+  }).filter((item) => item)
+
+  questions[1].choices = repoNames
 
   inquirer.prompt(questions).then((answers) => {
-    const { projectName, technology } = answers;
+    const { projectName, template: selectTemplateName } = answers;
 
     // 校验项目名称是否合法
     if (!projectName) {
@@ -38,15 +51,17 @@ module.exports = () => {
     }
 
     const projectDirectory = `${PROJECT_DIR}/${projectName}`;
-    console.log(projectDirectory)
 
+    // 项目生成器
+    const projectGenerator = new Generator(selectTemplateName, projectDirectory);
 
     // 判断是否已经存在此文件夹
     if (!fs.existsSync(projectDirectory)) {
       // Create project directory
       fs.mkdirSync(projectDirectory);
 
-      cloneRepo(projectDirectory)
+      // 开始创建项目
+      projectGenerator.create(repoInstance, projectName);
     } else {
       inquirer.prompt(REMOVE_REQUESTIONS).then((answers) => {
         const { remove } = answers;
@@ -56,14 +71,17 @@ module.exports = () => {
           fs.rmSync(projectDirectory, { recursive: true });
           fs.mkdirSync(projectDirectory);
 
-          cloneRepo(projectDirectory)
+          // 开始创建项目
+          projectGenerator.create(repoInstance, projectName);
+
         } else {
           log('创建失败，文件夹已经存在', 'red');
         }
       }, (error) => {
         console.log(error)
-      }
-      )
+      })
     }
+
+
   });
 }
