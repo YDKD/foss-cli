@@ -1,4 +1,4 @@
-const chalk = require('chalk');
+const ora = require('ora');
 const util = require('util')
 const inquirer = require('inquirer');
 const downloadGitRepo = require('download-git-repo')
@@ -34,7 +34,7 @@ class Generator {
   }
 
   async download(repo, tag) {
-    const requestUrl = `direct:${repo}${tag ? '#' + tag : ''}`
+    const requestUrl = `direct:${repo}${tag ? '#' + tag : ''}#main`
     console.log('requestUrl', requestUrl, 'targetDir', this.targetDir)
 
 
@@ -43,10 +43,7 @@ class Generator {
       'waiting download template',
       requestUrl,
       this.targetDir,
-      { clone: true },
-      (err) => {
-        spinner.fail(err);
-      }
+      { clone: true }
     )
   }
 
