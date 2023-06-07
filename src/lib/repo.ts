@@ -1,5 +1,5 @@
-const { wrapLoading } = require('../utils');
-const { fetchRepoList, fetchTagList } = require('./http')
+import { wrapLoading } from "../utils";
+import { fetchRepoList, fetchTagList } from "./http";
 
 class Repo {
   repoList = []
@@ -21,7 +21,7 @@ class Repo {
       return this.repoList;
     }
 
-    const repoList = await wrapLoading(fetchRepoList, '仓库获取中...');
+    const repoList = await wrapLoading(fetchRepoList, '仓库获取中...') as any;
     if (!repoList) return [];
 
     this.repoList = repoList
@@ -36,14 +36,14 @@ class Repo {
    * @description: 获取对应仓库的标签列表
    * @author: YDKD
    */
-  async getTags(selectRepoName) {
+  async getTags(selectRepoName: string) {
 
     if (this.tagsList.length) {
       return this.tagsList;
     }
 
     // 1）基于 repo 结果，远程拉取对应的 tag 列表
-    const tagsList = await wrapLoading(fetchTagList, 'waiting fetch tag', selectRepoName);
+    const tagsList = await wrapLoading(fetchTagList, 'waiting fetch tag', selectRepoName) as any;
     if (!tagsList) return;
 
     this.tagsList = tagsList
@@ -53,4 +53,4 @@ class Repo {
   }
 }
 
-module.exports = Repo;
+export default Repo;

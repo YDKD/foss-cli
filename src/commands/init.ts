@@ -1,14 +1,14 @@
 
-const { program } = require('commander');
+import { program } from "commander";
 
-const { handleRoute, handleView, handleApi } = require('../services')
+import { handleApi, handleView, handleRoute } from '../services'
 
-const { PROJECT_DIR } = require('../../config')
 
-const log = require("../log");
-const { toHumpName } = require('../utils')
+import { PROJECT_DIR } from '../../config'
 
-module.exports = (name) => {
+import { toHumpName } from '../utils'
+
+const init = (name: string) => {
 
   // 获取选项
   const options = program.opts();
@@ -43,3 +43,5 @@ module.exports = (name) => {
     handleRoute(name, createFilePath);
   }
 }
+
+export default init;

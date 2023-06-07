@@ -4,7 +4,20 @@
  * [name] 为选填项
  */
 
-const commands = [
+interface IOptionItem {
+  flags: string
+  description: string
+  defaultValue: string | boolean
+}
+
+interface ICommandItem {
+  name: string
+  description: string
+  actionFileName?: string
+  options?: IOptionItem[]
+}
+
+const commands: ICommandItem[] = [
   {
     name: 'create [command]',
     description: 'create a new project',
@@ -44,4 +57,6 @@ const commands = [
   }
 ]
 
-module.exports = commands
+export default commands
+
+export type { ICommandItem, IOptionItem }

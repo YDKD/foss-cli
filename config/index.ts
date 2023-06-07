@@ -1,9 +1,12 @@
-const path = require('path');
+import path from 'node:path';
 
-const commands = require('./commands')
+import commands from './commands';
 
 // 模板文件夹
-const TEMPLATE_DIR = path.resolve(__dirname, '../templates')
+const TEMPLATE_DIR = path.resolve(process.cwd(), 'templates')
+
+// banner txt
+const BANNER_TXT = `FOSS CLI`
 
 // 项目文件夹
 const PROJECT_DIR = process.cwd()
@@ -25,13 +28,9 @@ const PROJECT_CONFIG = {
   */
   DEFAULT_PROJECT_NAME: 'my-project',
   /**
-   * 默认技术选择
-   */
-  DEFAULT_TEMPLATE: 'vue3',
-  /**
    * 默认模板
    */
-  DEFAULT_TEMPLATE: 'vue',
+  DEFAULT_TEMPLATE: 'foss-vue-template',
 }
 
 // 仓库配置
@@ -50,11 +49,12 @@ const REPO_CONFIG = {
   REPO_DEFAULT_BRANCH: 'main',
 }
 
-module.exports = {
+export {
   TEMPLATE_DIR,
   PROJECT_DIR,
   REMOVE_REQUESTIONS,
   PROJECT_CONFIG,
   commands,
-  REPO_CONFIG
+  REPO_CONFIG,
+  BANNER_TXT
 }

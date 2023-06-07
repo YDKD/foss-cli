@@ -1,12 +1,12 @@
+import path from 'node:path'
+import { generator } from '../../utils'
 
-const path = require('node:path')
-const { generator } = require('../../utils')
 
 // 创建的文件夹名称
 const createFileDictatoryName = 'views'
 const fileSuffix = '.vue'
 
-const handleRoute = (fileName, filePath) => {
+const handleRoute = (fileName: string, filePath: string) => {
   // 模板路径
   const templatePath = path.join(__dirname, '../../templates', 'vue/index.js')
 
@@ -19,4 +19,4 @@ const handleRoute = (fileName, filePath) => {
 
 }
 
-module.exports = handleRoute
+export default handleRoute

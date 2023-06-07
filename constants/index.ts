@@ -11,4 +11,4 @@ const ERROR_TYPE = {
   FILE_IS_NOT_EXIST: "文件不存在"
 }
 
-module.exports = ERROR_TYPE
+export default ERROR_TYPE

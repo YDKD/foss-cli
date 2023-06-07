@@ -1,22 +1,31 @@
-const ora = require('ora');
-const util = require('util')
-const prompts = require('@posva/prompts');
-const downloadGitRepo = require('download-git-repo')
+import util from 'util';
+import prompts from '@posva/prompts';
 
-const { wrapLoading } = require('../utils');
-const log = require('../log');
-const { REPO_CONFIG } = require('../../config');
+import { wrapLoading } from '../utils'
+import log from '../log';
+import { REPO_CONFIG } from '../../config';
+import { downloadGitRepo } from './http'
+
+interface ITagItem {
+  name: string
+}
+
+interface IRepoItem {
+  name: string
+}
 
 
 class Generator {
-  constructor(selectTemplateName, targetDir) {
+  selectTemplateName = ''
+  targetDir = ''
+
+  constructor(selectTemplateName: string, targetDir: string) {
     this.selectTemplateName = selectTemplateName;
     this.targetDir = targetDir;
 
-    this.downloadGitRepo = util.promisify(downloadGitRepo)
   }
 
-  async handleTag(tagsList) {
+  async handleTag(tagsList: ITagItem[]) {
 
     const tagNameList = tagsList.map(item => ({
       title: item.name
@@ -36,27 +45,25 @@ class Generator {
     return tag
   }
 
-  async download(repo, tag) {
-    const requestUrl = `direct:${repo}${tag ? '#' + tag : ''}#${REPO_CONFIG.REPO_DEFAULT_BRANCH}`
-
-
+  async download(repo: string, tag: string) {
     await wrapLoading(
-      this.downloadGitRepo,
+      downloadGitRepo,
       'waiting download template',
-      requestUrl,
+      repo,
       this.targetDir,
-      { clone: true }
+      tag,
+      REPO_CONFIG.REPO_DEFAULT_BRANCH
     )
   }
 
 
-  async create(repoInstance, projectName) {
+  async create(repoInstance: any, projectName: string) {
     const tagsList = await repoInstance.getTags(this.selectTemplateName)
     if (!tagsList) return;
 
     const selectTag = await this.handleTag(tagsList)
     console.log('selectTag', selectTag)
-    const selectRepo = repoInstance.repoList.find(item => item.name === this.selectTemplateName)
+    const selectRepo = repoInstance.repoList.find((item: IRepoItem) => item.name === this.selectTemplateName)
 
     // 下载模板
     await this.download(selectRepo.clone_url, selectTag)
@@ -66,4 +73,6 @@ class Generator {
   }
 }
 
-module.exports = Generator;
+export default Generator;
+
+export type { IRepoItem, ITagItem }

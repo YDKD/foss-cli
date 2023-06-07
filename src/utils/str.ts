@@ -1,4 +1,4 @@
-const toHumpName = (name) => {
+const toHumpName = (name: string) => {
   let humpName = name
 
   if (humpName.indexOf('-') !== -1) {
@@ -12,6 +12,6 @@ const toHumpName = (name) => {
   return humpName
 }
 
-module.exports = {
+export {
   toHumpName
 }

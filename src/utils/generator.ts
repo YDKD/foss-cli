@@ -1,13 +1,13 @@
-const fs = require('node:fs')
-const log = require('../log')
+import fs from 'node:fs'
+import log from '../log'
 
-const generator = (createFilePath, fullFilePath, templatePath) => {
+const generator = (createFilePath: string, fullFilePath: string, templatePath: string) => {
 
   // 读取模板文件内容
   let fileContent = ''
   try {
     fileContent = fs.readFileSync(templatePath, { encoding: 'utf-8' })
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(err)
   }
 
@@ -18,7 +18,7 @@ const generator = (createFilePath, fullFilePath, templatePath) => {
    */
   const writeFileFn = () => {
     // 写入文件
-    fs.writeFile(fullFilePath, fileContent, (err) => {
+    fs.writeFile(fullFilePath, fileContent, (err: any) => {
       if (err) {
         console.error('写入文件时发生错误:', err);
       } else {
@@ -40,4 +40,4 @@ const generator = (createFilePath, fullFilePath, templatePath) => {
   }
 }
 
-module.exports = generator
+export { generator }

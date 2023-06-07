@@ -1,15 +1,15 @@
+import path from 'node:path'
+import { generator } from '../../utils'
 
-const path = require('node:path')
-const { generator } = require('../../utils')
 
 // 创建的文件夹名称
-const createFileDictatoryName = 'api'
+const createFileDictatoryName = 'router'
 const fileSuffix = '.ts'
 
-const handleApi = (fileName, filePath) => {
+const handleRoute = (fileName: string, filePath: string) => {
 
   // 模板路径
-  const templatePath = path.join(__dirname, '../../templates', 'api/index.js')
+  const templatePath = path.join(__dirname, '../../templates', 'router/index.js')
 
   const createFilePath = filePath + '/' + createFileDictatoryName
 
@@ -20,4 +20,4 @@ const handleApi = (fileName, filePath) => {
 
 }
 
-module.exports = handleApi
+export default handleRoute

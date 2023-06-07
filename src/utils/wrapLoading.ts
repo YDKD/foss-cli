@@ -1,6 +1,9 @@
-const ora = require('ora');
+import ora from "ora";
 
-const wrapLoading = async(fn, message, ...args) => {
+type TFn = (...args: any) => Promise<any> | undefined
+
+
+const wrapLoading = async (fn: TFn, message: string, ...args: any) => {
   const spinner = ora(message);
   spinner.start();
 
@@ -12,5 +15,6 @@ const wrapLoading = async(fn, message, ...args) => {
     spinner.fail('Request failed, refetch ...');
   }
 }
-
-module.exports = wrapLoading;
+export {
+  wrapLoading
+}
