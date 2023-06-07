@@ -22,12 +22,12 @@
   },
   "homepage": "https://github.com/YDKD/foss-cli#readme",
   "dependencies": {
+    "@posva/prompts": "^2.4.4",
     "axios": "^1.4.0",
     "chalk": "^4.1.2",
     "commander": "^10.0.1",
     "download-git-repo": "^3.0.2",
     "ejs": "^3.1.9",
-    "inquirer": "^8.2.5",
     "ora": "^5.4.1"
   },
   "devDependencies": {

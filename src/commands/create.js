@@ -2,7 +2,8 @@
 const fs = require('fs');
 const ejs = require('ejs');
 const path = require('path');
-const inquirer = require('inquirer');
+const prompts = require('@posva/prompts');
+
 const { Generator, Repo } = require('../lib')
 
 // local dependencies
@@ -13,17 +14,17 @@ const cloneRepo = require('../utils/clone.js');
 module.exports = async () => {
   const questions = [
     {
-      type: 'input',
+      type: 'text',
       name: 'projectName',
       message: 'Enter project name:',
-      default: PROJECT_CONFIG.DEFAULT_PROJECT_NAME,
+      initial: PROJECT_CONFIG.DEFAULT_PROJECT_NAME,
     },
     {
-      type: 'list',
+      type: 'autocomplete',
       name: 'template',
       message: 'Select a template to create project',
       choices: [],
-      default: PROJECT_CONFIG.DEFAULT_TEMPLATE,
+      initial: PROJECT_CONFIG.DEFAULT_TEMPLATE,
     },
   ];
 
@@ -35,13 +36,15 @@ module.exports = async () => {
   // 处理模板名称
   const repoNames = repoList.map((item) => {
     if (item.name?.indexOf('template') != -1) {
-      return item.name
+      return {
+        title: item.name
+      }
     }
   }).filter((item) => item)
 
   questions[1].choices = repoNames
 
-  inquirer.prompt(questions).then((answers) => {
+  prompts(questions).then((answers) => {
     const { projectName, template: selectTemplateName } = answers;
 
     // 校验项目名称是否合法
@@ -63,7 +66,7 @@ module.exports = async () => {
       // 开始创建项目
       projectGenerator.create(repoInstance, projectName);
     } else {
-      inquirer.prompt(REMOVE_REQUESTIONS).then((answers) => {
+      prompts(REMOVE_REQUESTIONS).then((answers) => {
         const { remove } = answers;
         if (remove === true) {
           // 兼容 node 版本

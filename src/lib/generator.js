@@ -1,6 +1,6 @@
 const ora = require('ora');
 const util = require('util')
-const inquirer = require('inquirer');
+const prompts = require('@posva/prompts');
 const downloadGitRepo = require('download-git-repo')
 
 const { wrapLoading } = require('../utils');
@@ -17,14 +17,16 @@ class Generator {
 
   async handleTag(tagsList) {
 
-    const tagNameList = tagsList.map(item => item.name).filter(item => item)
+    const tagNameList = tagsList.map(item => ({
+      title: item.name
+    })).filter(item => item)
 
     // 2）用户选择自己需要下载的 tag
     const {
       tag
-    } = await inquirer.prompt({
+    } = await prompts({
       name: 'tag',
-      type: 'list',
+      type: 'autocomplete',
       choices: tagNameList,
       message: 'Place choose a tag to create project'
     })

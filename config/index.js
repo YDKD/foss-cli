@@ -14,6 +14,7 @@ const REMOVE_REQUESTIONS = [
     type: 'confirm',
     name: 'remove',
     message: '此文件夹已经存在，是否删除后，重新再次创建？',
+    initial: true,
   }
 ]
 
