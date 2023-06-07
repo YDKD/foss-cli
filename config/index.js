@@ -20,20 +20,34 @@ const REMOVE_REQUESTIONS = [
 
 // 项目创建配置
 const PROJECT_CONFIG = {
-  // 默认项目名
+  /**
+  * 默认项目名
+  */
   DEFAULT_PROJECT_NAME: 'my-project',
-  // 默认技术选择
+  /**
+   * 默认技术选择
+   */
   DEFAULT_TEMPLATE: 'vue3',
-  // 默认选择模板
+  /**
+   * 默认模板
+   */
   DEFAULT_TEMPLATE: 'vue',
 }
 
 // 仓库配置
 const REPO_CONFIG = {
-  // 仓库地址 前缀
+  /**
+   * 仓库地址 前缀
+   */
   REPO_URL_PREFFIX: 'https://api.github.com/orgs/foss-y/repos',
-  // 仓库标签地址 前缀
-  REPO_TAGS_URL_PREFFIX: 'https://api.github.com/repos/foss-y'
+  /**
+   * 仓库标签地址 前缀
+   */
+  REPO_TAGS_URL_PREFFIX: 'https://api.github.com/repos/foss-y',
+  /**
+   * 默认分支
+   */
+  REPO_DEFAULT_BRANCH: 'main',
 }
 
 module.exports = {

@@ -5,6 +5,7 @@ const downloadGitRepo = require('download-git-repo')
 
 const { wrapLoading } = require('../utils');
 const log = require('../log');
+const { REPO_CONFIG } = require('../../config');
 
 
 class Generator {
@@ -36,8 +37,7 @@ class Generator {
   }
 
   async download(repo, tag) {
-    const requestUrl = `direct:${repo}${tag ? '#' + tag : ''}#main`
-    console.log('requestUrl', requestUrl, 'targetDir', this.targetDir)
+    const requestUrl = `direct:${repo}${tag ? '#' + tag : ''}#${REPO_CONFIG.REPO_DEFAULT_BRANCH}`
 
 
     await wrapLoading(

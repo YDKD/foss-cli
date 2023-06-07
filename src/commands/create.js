@@ -17,7 +17,7 @@ module.exports = async () => {
       type: 'text',
       name: 'projectName',
       message: 'Enter project name:',
-      initial: PROJECT_CONFIG.DEFAULT_PROJECT_NAME,
+      initial: PROJECT_CONFIG.DEFAULT_PROJECT_NAME
     },
     {
       type: 'autocomplete',
@@ -44,47 +44,45 @@ module.exports = async () => {
 
   questions[1].choices = repoNames
 
-  prompts(questions).then((answers) => {
-    const { projectName, template: selectTemplateName } = answers;
+  const templateResult = await prompts(questions)
 
-    // 校验项目名称是否合法
-    if (!projectName) {
-      log('项目名称不能为空', 'red');
-      return;
-    }
+  const { projectName, template: selectTemplateName } = templateResult;
 
-    const projectDirectory = `${PROJECT_DIR}/${projectName}`;
+  // 校验项目名称是否合法
+  if (!projectName) {
+    log('项目名称不能为空', 'red');
+    return;
+  }
 
-    // 项目生成器
-    const projectGenerator = new Generator(selectTemplateName, projectDirectory);
+  const projectDirectory = `${PROJECT_DIR}/${projectName}`;
 
-    // 判断是否已经存在此文件夹
-    if (!fs.existsSync(projectDirectory)) {
-      // Create project directory
+  // 项目生成器
+  const projectGenerator = new Generator(selectTemplateName, projectDirectory);
+
+  // 判断是否已经存在此文件夹
+  if (!fs.existsSync(projectDirectory)) {
+    // Create project directory
+    fs.mkdirSync(projectDirectory);
+
+    // 开始创建项目
+    projectGenerator.create(repoInstance, projectName);
+  } else {
+    const removeDirResult = await prompts(REMOVE_REQUESTIONS).catch((error) => {
+      log('创建失败', 'red');
+    })
+
+    const { remove } = removeDirResult;
+    if (remove === true) {
+      // 兼容 node 版本
+      fs.rmSync = fs.rmSync || fs.rmdirSync;
+      fs.rmSync(projectDirectory, { recursive: true });
       fs.mkdirSync(projectDirectory);
 
       // 开始创建项目
       projectGenerator.create(repoInstance, projectName);
+
     } else {
-      prompts(REMOVE_REQUESTIONS).then((answers) => {
-        const { remove } = answers;
-        if (remove === true) {
-          // 兼容 node 版本
-          fs.rmSync = fs.rmSync || fs.rmdirSync;
-          fs.rmSync(projectDirectory, { recursive: true });
-          fs.mkdirSync(projectDirectory);
-
-          // 开始创建项目
-          projectGenerator.create(repoInstance, projectName);
-
-        } else {
-          log('创建失败，文件夹已经存在', 'red');
-        }
-      }, (error) => {
-        console.log(error)
-      })
+      log('创建失败，文件夹已经存在', 'red');
     }
-
-
-  });
+  }
 }
