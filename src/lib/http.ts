@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { simpleGit } from "simple-git";
 import { REPO_CONFIG } from "../../config";
 import fs from 'node:fs'
+import log from "../log";
 
 axios.interceptors.response.use((res: AxiosResponse) => {
   return res.data;
@@ -44,7 +45,7 @@ async function downloadGitRepo(repo: string, dir: string, tag: string, branch: s
     try {
       // 删除 .git 文件
       await git.cwd(dir)
-      fs.rmdirSync(`${dir}/.git`, { recursive: true });
+      await git.raw(['remote', 'remove', 'origin'])
     } catch (err) {
       console.error(err);
     }

@@ -125,7 +125,7 @@ async function downloadGitRepo(repo, dir, tag, branch) {
     await git.checkout(tag);
     try {
       await git.cwd(dir);
-      fs.rmdirSync(`${dir}/.git`, { recursive: true });
+      await git.raw(["remote", "remove", "origin"]);
     } catch (err) {
       console.error(err);
     }
